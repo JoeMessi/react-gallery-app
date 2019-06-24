@@ -24,43 +24,43 @@ export default class App extends Component {
 
 
   // IIFEs for defaults
-  // componentDidMount() {
-  //     (() => {
-  //        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=dog&per_page=24&format=json&nojsoncallback=1`)
-  //          .then(response => {
-  //            this.setState({
-  //              defaultDogs: response.data.photos.photo
-  //            })
-  //          })
-  //          .catch(error => {
-  //            console.log('Error fetching and parsing the data', error)
-  //          })
-  //      })();
-  //
-  //      (() => {
-  //         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=cat&per_page=24&format=json&nojsoncallback=1`)
-  //           .then(response => {
-  //             this.setState({
-  //               defaultCats: response.data.photos.photo
-  //             })
-  //           })
-  //           .catch(error => {
-  //             console.log('Error fetching and parsing the data', error)
-  //           })
-  //       })();
-  //
-  //       (() => {
-  //          axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=monkey&per_page=24&format=json&nojsoncallback=1`)
-  //            .then(response => {
-  //              this.setState({
-  //                defaultMonkeys: response.data.photos.photo
-  //              })
-  //            })
-  //            .catch(error => {
-  //              console.log('Error fetching and parsing the data', error)
-  //            })
-  //        })();
-  // }
+  componentDidMount() {
+      (() => {
+         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=dog&per_page=24&format=json&nojsoncallback=1`)
+           .then(response => {
+             this.setState({
+               defaultDogs: response.data.photos.photo
+             })
+           })
+           .catch(error => {
+             console.log('Error fetching and parsing the data', error)
+           })
+       })();
+
+       (() => {
+          axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=cat&per_page=24&format=json&nojsoncallback=1`)
+            .then(response => {
+              this.setState({
+                defaultCats: response.data.photos.photo
+              })
+            })
+            .catch(error => {
+              console.log('Error fetching and parsing the data', error)
+            })
+        })();
+
+        (() => {
+           axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=monkey&per_page=24&format=json&nojsoncallback=1`)
+             .then(response => {
+               this.setState({
+                 defaultMonkeys: response.data.photos.photo
+               })
+             })
+             .catch(error => {
+               console.log('Error fetching and parsing the data', error)
+             })
+         })();
+  }
 
 
   handleFeatching = (tag) => {
@@ -74,6 +74,8 @@ export default class App extends Component {
         console.log('Error fetching and parsing the data', error)
       })
   }
+
+
 
 
 

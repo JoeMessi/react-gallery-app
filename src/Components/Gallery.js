@@ -8,21 +8,39 @@ const Gallery = ({ match }) => {
     <Consumer>
      {
        value => {
-         let tag = match.params.tag;
-         value.actions.handleFeatching(tag);
 
-         let images = value.searchImages.map(images =>
-           <GalleryItem
-             url={`https://farm${images.farm}.staticflickr.com/${images.server}/${images.id}_${images.secret}.jpg`}
-             key={images.id}
-           />
-         );
+         function mapping(data) {
+           return  data.map(images =>
+             <GalleryItem
+               url={`https://farm${images.farm}.staticflickr.com/${images.server}/${images.id}_${images.secret}.jpg`}
+               key={images.id}
+             />
+           );
+         }
+
+         let tag = match.params.tag;
+         let images;
+
+         if(tag === 'cats') {
+           images = mapping(value.defaultCats);
+
+         }else if(tag === 'dogs') {
+           images = mapping(value.defaultDogs);
+
+         }else if(tag === 'monkeys') {
+           images = mapping(value.defaultMonkeys);
+
+         }else {
+           value.actions.handleFeatching(tag);
+           images = mapping(value.searchImages);
+         }
 
          return (
            <div className="photo-container">
              <h2>{ tag }</h2>
              <ul>
-                { images }
+                {(value.loading) ? <p>Loading...</p> : images}
+
              </ul>
            </div>
          );
