@@ -1,54 +1,24 @@
 import React from 'react';
-import { Consumer } from './Context';
 import GalleryItem from './GalleryItem';
 
-const Gallery = ({ match }) => {
+const Gallery = (props) => {
 
-  return (
-    <Consumer>
-     {
-       value => {
+  let images = props.data.map(images =>
+     <GalleryItem
+       url={`https://farm${images.farm}.staticflickr.com/${images.server}/${images.id}_${images.secret}.jpg`}
+       key={images.id}
+     />
+   );
 
-         function mapping(data) {
-           return  data.map(images =>
-             <GalleryItem
-               url={`https://farm${images.farm}.staticflickr.com/${images.server}/${images.id}_${images.secret}.jpg`}
-               key={images.id}
-             />
-           );
-         }
+   return (
+     <div className="photo-container">
+       <h2>{ (props.data.length === 0) ? 'Sorry no match found!' : props.results }</h2>
+       <ul>
+          { images }
+       </ul>
+     </div>
+   );
 
-         let tag = match.params.tag;
-         let images;
-
-         if(tag === 'cats') {
-           images = mapping(value.defaultCats);
-
-         }else if(tag === 'dogs') {
-           images = mapping(value.defaultDogs);
-
-         }else if(tag === 'monkeys') {
-           images = mapping(value.defaultMonkeys);
-
-         }else {
-           value.actions.handleFeatching(tag);
-           images = mapping(value.searchImages);
-         }
-
-         return (
-           <div className="photo-container">
-             <h2>{ tag }</h2>
-             <ul>
-                {(value.loading) ? <p>Loading...</p> : images}
-
-             </ul>
-           </div>
-         );
-       }
-     }
-    </Consumer>
-
-  );
 }
 
 export default Gallery;

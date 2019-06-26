@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
-  BrowserRouter,
-  Route
+  Route,
+  Switch,
+  Redirect
 } from 'react-router-dom';
 import { Provider } from './Components/Context';
 import Header from './Components/Header';
-import SearchForm from './Components/SearchForm';
-import Nav from './Components/Nav';
 import Gallery from './Components/Gallery';
+import NotFound from './Components/NotFound';
 import apiKey from './config';
 
 
@@ -19,7 +19,8 @@ export default class App extends Component {
       searchImages: [],
       defaultDogs: [],
       defaultCats: [],
-      defaultMonkeys: []
+      defaultMonkeys: [],
+      loading: null
     }
 
 
@@ -60,14 +61,31 @@ export default class App extends Component {
                console.log('Error fetching and parsing the data', error)
              })
          })();
+
+
+         const url = this.props.location.pathname;
+
+         if(url.includes('/search')) {
+           let query = url.slice(8);
+
+           this.handleFeatching(query);
+           console.log('on componentDidMount');
+         }
   }
 
 
-  handleFeatching = (tag) => {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&per_page=24&format=json&nojsoncallback=1`)
+
+  handleFeatching = (query) => {
+
+    this.setState({
+      loading: true
+    })
+
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
-          searchImages: response.data.photos.photo
+          searchImages: response.data.photos.photo,
+          loading: false
         })
       })
       .catch(error => {
@@ -78,33 +96,37 @@ export default class App extends Component {
 
 
 
-
   render() {
     return (
-      <BrowserRouter>
-          <Provider value={{
-            searchImages: this.state.searchImages,
-            defaultCats: this.state.defaultCats,
-            defaultDogs: this.state.defaultDogs,
-            defaultMonkeys: this.state.defaultMonkeys,
 
-            actions: {
-              handleFeatching: this.handleFeatching
-            }
-          }}>
-            <div>
-               <Header />
-               <Route component={ SearchForm } />
-               <Nav />
-               <Route path="/:tag" component={ Gallery } />
-{/*
-  <Route path="/dogs" render={ () => <Gallery data={this.state.defaultDogs} results="Dogs" /> } />
-  <Route path="/cats" render={ () => <Gallery data={this.state.defaultCats} results="Cats" /> } />
-  <Route path="/monkeys" render={ () => <Gallery data={this.state.defaultMonkeys} results="Monkeys" /> } />
-  */}
-            </div>
-          </Provider>
-      </BrowserRouter>
+      <Provider value={{
+        searchImages: this.state.searchImages,
+        defaultCats: this.state.defaultCats,
+        defaultDogs: this.state.defaultDogs,
+        defaultMonkeys: this.state.defaultMonkeys,
+
+        actions: {
+          handleFeatching: this.handleFeatching
+        }
+      }}>
+      <div className="container">
+      <Route component={ Header } />
+      <Switch>
+         <Route exact path="/" render={ () => <Redirect to="/cats" /> } />
+         <Route path="/cats" render={ () => <Gallery data={this.state.defaultCats} results="Cats" /> } />
+         <Route path="/dogs" render={ () => <Gallery data={this.state.defaultDogs} results="Dogs" /> } />
+         <Route path="/monkeys" render={ () => <Gallery data={this.state.defaultMonkeys} results="Monkeys" /> } />
+         <Route path="/search/:query" render={
+               ({match}) => (this.state.loading) ? <h2>Loading...</h2> :
+               <Gallery data={this.state.searchImages} results={match.params.query} />
+               } />
+
+         <Route component={ NotFound } />
+      </Switch>
+
+      </div>
+      </Provider>
+
     );
   }
 
