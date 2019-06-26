@@ -15,53 +15,31 @@ import apiKey from './config';
 
 export default class App extends Component {
 
-    state = {
-      searchImages: [],
-      defaultDogs: [],
-      defaultCats: [],
-      defaultMonkeys: [],
+  state = {
+      search: [],
+      cats: [],
+      dogs: [],
+      monkeys: [],
       loading: null
-    }
+  };
+
+  defaultImages = ['cats', 'dogs', 'monkeys'];
 
 
-  // IIFEs for defaults
+
   componentDidMount() {
-      (() => {
-         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=dog&per_page=24&format=json&nojsoncallback=1`)
-           .then(response => {
-             this.setState({
-               defaultDogs: response.data.photos.photo
-             })
-           })
-           .catch(error => {
-             console.log('Error fetching and parsing the data', error)
-           })
-       })();
 
-       (() => {
-          axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=cat&per_page=24&format=json&nojsoncallback=1`)
-            .then(response => {
-              this.setState({
-                defaultCats: response.data.photos.photo
-              })
-            })
-            .catch(error => {
-              console.log('Error fetching and parsing the data', error)
-            })
-        })();
-
-        (() => {
-           axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=monkey&per_page=24&format=json&nojsoncallback=1`)
-             .then(response => {
-               this.setState({
-                 defaultMonkeys: response.data.photos.photo
-               })
-             })
-             .catch(error => {
-               console.log('Error fetching and parsing the data', error)
-             })
-         })();
-
+    for(let i = 0; i < this.defaultImages.length; i++) {
+       axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${this.defaultImages[i]}&per_page=24&format=json&nojsoncallback=1`)
+       .then(response => {
+         this.setState({
+           [this.defaultImages[i]] : response.data.photos.photo
+         })
+       })
+       .catch(error => {
+         console.log('Error fetching and parsing the data', error)
+       })
+     }
 
          const url = this.props.location.pathname;
 
@@ -84,7 +62,7 @@ export default class App extends Component {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
-          searchImages: response.data.photos.photo,
+          search: response.data.photos.photo,
           loading: false
         })
       })
@@ -100,25 +78,36 @@ export default class App extends Component {
     return (
 
       <Provider value={{
-        searchImages: this.state.searchImages,
-        defaultCats: this.state.defaultCats,
-        defaultDogs: this.state.defaultDogs,
-        defaultMonkeys: this.state.defaultMonkeys,
 
         actions: {
           handleFeatching: this.handleFeatching
         }
       }}>
+
       <div className="container">
       <Route component={ Header } />
+
       <Switch>
          <Route exact path="/" render={ () => <Redirect to="/cats" /> } />
-         <Route path="/cats" render={ () => <Gallery data={this.state.defaultCats} results="Cats" /> } />
-         <Route path="/dogs" render={ () => <Gallery data={this.state.defaultDogs} results="Dogs" /> } />
-         <Route path="/monkeys" render={ () => <Gallery data={this.state.defaultMonkeys} results="Monkeys" /> } />
+
+         <Route path="/cats" render={
+           () => (this.state.cats.length === 0) ? <h2>Loading...</h2> :
+
+           <Gallery data={this.state.cats} results="Cats" />
+         } />
+
+
+         <Route path="/dogs" render={
+           () => (this.state.dogs.length === 0) ? <h2>Loading...</h2> :
+           <Gallery data={this.state.dogs} results="Dogs" />
+         } />
+
+
+
+         <Route path="/monkeys" render={ () => <Gallery data={this.state.monkeys} results="Monkeys" /> } />
          <Route path="/search/:query" render={
                ({match}) => (this.state.loading) ? <h2>Loading...</h2> :
-               <Gallery data={this.state.searchImages} results={match.params.query} />
+               <Gallery data={this.state.search} results={match.params.query} />
                } />
 
          <Route component={ NotFound } />
