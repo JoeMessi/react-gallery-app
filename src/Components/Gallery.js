@@ -12,7 +12,7 @@ const Gallery = (props) => {
 
    return (
      <div className="photo-container">
-       <h2>{ (props.data.length === 0) ? 'Sorry no match found!' : props.results }</h2>
+       <h2>{ (props.data.length === 0 && props.match) ? 'Sorry no match found!' : props.results }</h2>
        <ul>
           { images }
        </ul>
