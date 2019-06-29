@@ -1,16 +1,15 @@
 import React from 'react';
 
 const SearchForm = (props) => {
-
+  // reference used to get the current value of the input element in the form
   const searchInput = React.createRef();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    props.handleFeatching(searchInput.current.value);
-    console.log('on submit form');
-    let path = `/search/${searchInput.current.value}`;
-    props.history.push(path);
-    e.currentTarget.reset();
+    props.handleFeatching(searchInput.current.value); // fetch data passing the input value as argument
+    let path = `/search/${searchInput.current.value}`; // new path with the user search in it
+    props.history.push(path); // path is pushed as a new url
+    e.currentTarget.reset(); // input is resetted 
   }
 
   return (

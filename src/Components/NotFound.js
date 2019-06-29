@@ -1,11 +1,12 @@
 import React from 'react';
 
+// a simple 404 error component displayed only when the user navigate to a non-existing route 
 const NotFound = () => {
   return(
     <ul>
       <li className="not-found">
-        <h3>No Results Found</h3>
-        <p>You search did not return any results. Please try again.</p>
+        <h2>404</h2>
+        <p>Whoops! Looks like something went wrong</p>
       </li>
     </ul>
   );

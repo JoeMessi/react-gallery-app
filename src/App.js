@@ -13,7 +13,7 @@ import apiKey from './config';
 
 export default class App extends Component {
 
-  // initialize the state for the App component
+  // initialize the state of the App component
   state = {
       search: [],
       cats: [],
@@ -45,6 +45,7 @@ export default class App extends Component {
      // visiting the '/search/' route the App still functions as it is supposed to
      // by fetching new data. 'handleFeatching' is called passing as argument whatever is
      // after '/search/' in the url
+     // App is rendered via Route inside index.js so I can access the 'location' object
      const url = this.props.location.pathname;
 
      if(url.includes('/search')) {
@@ -53,7 +54,7 @@ export default class App extends Component {
      }
   }
 
-  // method used to fetch data from the API given a topic (query)
+  // method used to fetch data from the API given a topic (query parameter)
   // we set the state of the component with the new response every time the method is invoked.
   handleFeatching = (query) => {
     this.setState({
@@ -82,9 +83,10 @@ export default class App extends Component {
           otherwise I didn't need to use Route since the Header component will be always visible in the app */}
         <Route render={ ({history}) => <Header handleFeatching={this.handleFeatching} history={history} /> } />
         <Switch>
-      {/* depending on which Route, we render the gallery component with different data passed to it.
+      {/* depending on the Route, we render the gallery component with different data passed to it.
           for our defaults we pass the data we already fetched and stored during componentDidMount,
-          for the /search/ Route we pass whatever data is been fetched and store during the form search */}
+          for the /search/ Route we pass whatever data is been fetched and store during the form search,
+          which updates the 'search' property inside the state object of the component */}
            <Route exact path="/" render={ () => <Redirect to="/cats" /> } />
            <Route path="/cats" render={ () => <Gallery data={this.state.cats} results="Cats" /> } />
            <Route path="/dogs" render={ () => <Gallery data={this.state.dogs} results="Dogs" /> } />

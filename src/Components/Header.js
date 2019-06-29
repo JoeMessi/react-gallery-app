@@ -2,8 +2,9 @@ import React from 'react';
 import SearchForm from './SearchForm';
 import Nav from './Nav';
 
-// Header is a simple stateless component, it has the 'SearchForm' component in it
-// and it's used to move down props from the App to the SearchForm component
+// Header is a simple component, it references the 'SearchForm' component
+// and it's the component in the 'middle' used to move down data via props
+// from the App to the SearchForm component
 const Header = (props) => {
   return (
     <header>
@@ -12,6 +13,7 @@ const Header = (props) => {
          handleFeatching={props.handleFeatching}
          history={props.history} />
        <Nav />
+       <hr className="break"/>
     </header>
   );
 }
