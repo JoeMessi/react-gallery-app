@@ -1,3 +1,43 @@
+To use this app:
+
+1) download the project file.
+
+2) this app fetches data from the Flikr API, a personal API key is required for the app to be working,
+   - once you've got your personal key
+   - create a file named 'config.js' inside the 'Components' folder
+   - and write the following code inside the file using your personal API key
+     const apiKey = 'YourAPIKey';
+     export default apiKey;
+   - save it and that's it about API keys.
+
+3) open up the terminal and type: 'npm install' this will install all the required dependencies
+
+4) then type 'npm start' to start the application.
+
+5) Enjoy my React Gallery App :)
+
+
+
+for the reviewer of this project:
+
+I'm going for exceeded and these are some style I changed:
+
+background color of the body
+background, padding and border-radius of the .container div
+padding of the .photo-container
+color, font-weight, font-size and margin of the h2 that shows the name of the topic searched
+color of the main h1 title
+
+thanks and happy reviewing!
+
+ah also, looking at my code, if you think that something can be improved please let me know, that would
+be great.
+
+thanks!
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
